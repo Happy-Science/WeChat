@@ -8,8 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="D:/work/apache-tomcat-9.0.0.M1/lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="D:/work/apache-tomcat-9.0.0.M1/lib/jsp-api.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/java包/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/java包/commons-beanutils-1.9.2.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/java包/commons-collections4-4.1.jar"/>
@@ -19,5 +17,7 @@
 	<classpathentry kind="lib" path="D:/Program Files/java包/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/java包/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/java包/jsoup-1.8.3.jar"/>
+	<classpathentry kind="lib" path="D:/work/apache-tomcat-8.0.30/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="D:/work/apache-tomcat-8.0.30/lib/jsp-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+      <servlet-name>TestServlet</servlet-name>
+      <servlet-class>com.servlet.TestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>TestServlet</servlet-name>
+      <url-pattern>/TestServlet</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+      <servlet-name>GetJsonServlet</servlet-name>
+      <servlet-class>com.servlet.GetJsonServlet</servlet-class>
+  </servlet>
+    <servlet-mapping>
+      <servlet-name>GetJsonServlet</servlet-name>
+      <url-pattern>/GetJsonServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+      <servlet-name>GetPictureServlet</servlet-name>
+      <servlet-class>com.servlet.GetPictureServlet</servlet-class>
+  </servlet>
+    <servlet-mapping>
+      <servlet-name>GetPictureServlet</servlet-name>
+      <url-pattern>/GetPictureServlet</url-pattern>
+  </servlet-mapping>
+</web-app>

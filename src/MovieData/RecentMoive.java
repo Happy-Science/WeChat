@@ -14,7 +14,7 @@ public class RecentMoive {
 		String [] movieName = new String[10];
 		String [] movieDate = new String[10];
 		try {
-			doc = Jsoup.connect("http://movie.mtime.com/recent").get();
+			doc = Jsoup.connect("http://movie.mtime.com/recent").timeout(10000).get();
 			//Element movieName = doc.select("class.px14").first(); 
 //			Elements movieName = doc.getElementsByClass("px14");
 			for(int i=0; i<10; i++){

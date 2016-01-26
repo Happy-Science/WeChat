@@ -1,40 +1,43 @@
 package MovieData;
 
-import java.io.File;
 import java.io.IOException;
-
+import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class RecentMoive {
-	public void getMovieData(){
+	public ArrayList<Object> getMovieData(int movieNum){
+		ArrayList<Object> movieList = new ArrayList<Object>();
 		Document doc;
-		String [] movieName = new String[10];
-		String [] movieDate = new String[10];
+		String [] movieName = new String[movieNum];
+		String [] movieDate = new String[movieNum];
 		try {
 			doc = Jsoup.connect("http://movie.mtime.com/recent").timeout(10000).get();
-			//Element movieName = doc.select("class.px14").first(); 
-//			Elements movieName = doc.getElementsByClass("px14");
-			for(int i=0; i<10; i++){
+			String thisDate = "";
+			for(int i=0; i<movieNum; i++){
 				String strName = doc.select("h3.pt15 > a").get(i).text(); //
 				String strDate = doc.select("span.date").get(i).text(); //
+
+				if(!strDate.equals("")){
+					thisDate = strDate;
+				}
+				
 				if(strName.contains(" ")){
 					movieName[i] = strName.substring(0, strName.indexOf(" "));
+				}
+				
+				if(strDate.equals("")){
+					movieDate[i] = thisDate;
+				}else{
 					movieDate[i] = strDate;
-					if(strDate.equals("")){
-						strDate = "暂无";
-					}
-					System.out.println("电影名称：" + movieName[i]);
-					System.out.println("上映日期：" + strDate);
-					System.out.println();
-
 				}
 			}
+			movieList.add(0,movieName);
+			movieList.add(1,movieDate);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		return movieList;
 	}
 }

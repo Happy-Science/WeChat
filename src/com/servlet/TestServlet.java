@@ -17,7 +17,7 @@ public class TestServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    // TODO Auto-generated method stub
 	    response.setContentType("text/html;charset=utf-8");
-	    request.setCharacterEncoding("utf-8");//设置参数解码类型，必须和页面中一致
+	    request.setCharacterEncoding("utf-8");
 	    String sName=request.getParameter("name");
 	    String sPassword=request.getParameter("psw");
 	    

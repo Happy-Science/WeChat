@@ -21,9 +21,9 @@ public class GetJsonServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    // TODO Auto-generated method stub
 	    response.setContentType("text/html;charset=utf-8");
-	    request.setCharacterEncoding("utf-8");//设置参数解码类型，必须和页面中一致
+	    request.setCharacterEncoding("utf-8");
 	    String sid = request.getParameter("id");
-	    //编辑静态json数据
+	    //
 	    Map<String, String> map = new HashMap<String, String>();
 	    map.put("id", "2001");
 	    map.put("name", "xiaoming");

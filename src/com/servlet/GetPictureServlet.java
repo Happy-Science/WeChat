@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +18,7 @@ public class GetPictureServlet extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		response.setContentType("text/html;charset=utf-8");
-	    request.setCharacterEncoding("utf-8");//ÉèÖÃ²ÎÊı½âÂëÀàĞÍ£¬±ØĞëºÍÒ³ÃæÖĞÒ»ÖÂ
+	    request.setCharacterEncoding("utf-8");
 	    String fileName = request.getParameter("filename");
 	    String fileType = request.getParameter("filetype");
 	    String userName = request.getParameter("username");
@@ -28,23 +26,23 @@ public class GetPictureServlet extends HttpServlet {
 	    InputStream stream = request.getInputStream();
             String currentFilePath = "D:\\test\\" + userName + "\\" + fileType;
             File file =new File(currentFilePath);    
-          //Èç¹ûÎÄ¼ş¼Ğ²»´æÔÚÔò´´½¨    
+          //   
           if  (!file .exists()  && !file .isDirectory())      
           {       
-              System.out.println("//²»´æÔÚ");  
+              System.out.println("//è·¯å¾„ä¸å­˜åœ¨");  
               file.mkdir();    
           } else   
           {  
-              System.out.println("//Ä¿Â¼´æÔÚ");  
+              System.out.println("//è·¯å¾„å­˜åœ¨");  
           }
             FileOutputStream  fileStream = new FileOutputStream(new File(currentFilePath + "\\" + fileName));
-            //Ã¿´Î¶ÁÈ¡µÄ1024¸ö×Ö½Ú
+            //
             byte[] bytes = new byte[1024];
             int numReadByte = 0;
             while ((numReadByte = stream.read(bytes, 0, 1024)) != -1){ 
                 fileStream.write(bytes, 0,numReadByte);
             }
-            //¹Ø±ÕÁ÷
+            //
             stream.close();
             fileStream.close();
 	}

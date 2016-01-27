@@ -10,7 +10,7 @@ public class Weather_Run {
 	public static void main(String args[]){
 		NowWeather nw = new NowWeather();
 		JSONObject  json = new JSONObject();
-		String cityName = "玉溪";
+		String cityName = "昆明";
 		json = nw.getData(cityName);
 		
 		String city = json.getJSONObject("retData") .getString("city");

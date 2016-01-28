@@ -33,4 +33,13 @@
       <servlet-name>GetPictureServlet</servlet-name>
       <url-pattern>/GetPictureServlet</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+      <servlet-name>WeChat</servlet-name>
+      <servlet-class>com.servlet.WeChat</servlet-class>
+  </servlet>
+    <servlet-mapping>
+      <servlet-name>WeChat</servlet-name>
+      <url-pattern>/WeChat</url-pattern>
+  </servlet-mapping>
 </web-app>

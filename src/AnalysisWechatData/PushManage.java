@@ -12,7 +12,10 @@ import java.util.Date;
 	import org.jdom2.input.SAXBuilder;  
 	import org.jdom2.output.XMLOutputter;
 
-import MovieData.RecentMoive;  
+import MovieData.NowMovie;
+import MovieData.RecentMoive;
+import Weather.NowWeather;
+import net.sf.json.JSONObject;  
 	  
 	public class PushManage {  
 	      
@@ -62,32 +65,111 @@ import MovieData.RecentMoive;
 	                  
 	            } else if (event.equals("unsubscribe")) { //此为取消关注事件   
 	                  
-	            } else if (event.equals("CLICK")) { //此为 自定义菜单按钮点击事件  
-	                // 以下为自定义按钮事件  
-	                if (eKey.equals("即将上映")) { //菜单 : 即将上映电影
-	                	int movieNum = 10;
-	            		ArrayList<Object> movieList = new ArrayList<Object>();
-	                	RecentMoive rm = new RecentMoive();
-	            		movieList = rm.getMovieData(movieNum);
-	            		String[] movieName = (String[])(movieList.get(0));
-	            		String[] movieScore = (String[])(movieList.get(1));
-	            		//System.out.println("——————即将上映——————");
-	            		returnStr = "——————即将上映——————";
-	            		for(int i=0; i<movieName.length; i++){
-//	            			System.out.println((i+1) + ".电影名称：" + movieName[i]);
-//	            			System.out.println("上映时间：" + movieScore[i]);
-//	            			System.out.println();
-	            			returnStr ="/n" + (i+1) + ".电影名称：" + movieName[i] +
-	            					"/n上映时间：" + movieScore[i];
-	            		}
-	                   // returnStr = getBackXMLTypeText(toName,fromName,"点击了菜单1");  
-	                } else if (eKey.equals("正在上映")) {    //菜单  ：正在上映电影 
-	                    returnStr = getBackXMLTypeText(toName,fromName,"点击了菜单2");  
-	                }  
-	            }  
+	            }   
 	        } else if (type.equals("text")) { // 此为 文本信息  
-	            returnStr = getBackXMLTypeText(toName,fromName,"输入了:"+con);  
-	        }   
+	        	if(con.length()<=6 && con.length()>=4 && con.contains("映")){
+	        		if(con.length() == 4){
+	        			if (con.equals("即将上映")) { // 此为 文本信息  
+	        				int movieNum = 8;
+	        				ArrayList<Object> movieList = new ArrayList<Object>();
+	        				RecentMoive rm = new RecentMoive();
+	        				movieList = rm.getMovieData(movieNum);
+	        				String[] movieName = (String[])(movieList.get(0));
+	        				String[] movieScore = (String[])(movieList.get(1));
+	        				String re = null;
+	        				re = "———即将上映———";
+	        				for(int i=0; i<movieName.length; i++){
+	        					re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
+	        					"\n上映时间：" + movieScore[i];
+	        				}
+	        				returnStr = getBackXMLTypeText(toName,fromName, re);  
+	        			} else if (con.equals("正在热映")) { // 此为 文本信息  
+	        				int movieNum = 8;
+	        				ArrayList<Object> movieList = new ArrayList<Object>();
+	        				NowMovie nm = new NowMovie();
+	        				String re = null;
+	        				movieList = nm.getMovieData(movieNum, "kunming");//昆明
+	        				String[] movieName = (String[])(movieList.get(0));
+	        				String[] movieScore = (String[])(movieList.get(1));
+	        				re = "———正在热映———";
+	        				for(int i=0; i<movieName.length; i++){
+	        					re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
+			        					"\n豆瓣评分：" + movieScore[i];
+	        				}
+	        				returnStr = getBackXMLTypeText(toName,fromName, re);   
+	        			} else {
+	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
+	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
+	        			}
+	        		}else{
+	        			String left = con.substring(0, 4);
+	        			String right = con.substring(4, con.length());
+	        			if (left.equals("即将上映")) { // 此为 文本信息  
+	        				int movieNum = Integer.parseInt(right);
+	        				ArrayList<Object> movieList = new ArrayList<Object>();
+	        				RecentMoive rm = new RecentMoive();
+	        				movieList = rm.getMovieData(movieNum);
+	        				String[] movieName = (String[])(movieList.get(0));
+	        				String[] movieDate = (String[])(movieList.get(1));
+	        				String re = null;
+	        				re = "———即将上映———";
+	        				for(int i=0; i<movieName.length; i++){
+		        			re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
+		        					"\n上映时间：" + movieDate[i];
+	        				}
+	        				returnStr = getBackXMLTypeText(toName,fromName, re);  
+	        			} else if (left.equals("正在热映")) { // 此为 文本信息  
+	        				int movieNum = Integer.parseInt(right);;
+	        				ArrayList<Object> movieList = new ArrayList<Object>();
+	        				NowMovie nm = new NowMovie();
+	        				String re = null;
+	        				movieList = nm.getMovieData(movieNum, "kunming");//昆明
+	        				String[] movieName = (String[])(movieList.get(0));
+	        				String[] movieScore = (String[])(movieList.get(1));
+	        				re = "———正在热映———";
+	        				for(int i=0; i<movieName.length; i++){
+	        					re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
+			        					"\n豆瓣评分：" + movieScore[i];
+	        				}
+	        				returnStr = getBackXMLTypeText(toName,fromName, re);  
+	        			} else {
+	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
+	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
+	        			}
+	        		}
+	        	} else if(con.contains("天气")){
+	        		NowWeather nw = new NowWeather();
+	        		JSONObject  json = new JSONObject();
+	        		String cityName = con.substring(0, con.length()-2);
+	        		json = nw.getData(cityName);
+	        		
+	        		String errorNum = json.getString("errNum");
+	        		String rs="今日天气\n";
+	            	
+	            	if(errorNum.equals("0")){
+		        		String city = json.getJSONObject("retData") .getString("city");
+		        		String weather = json.getJSONObject("retData") .getString("weather");
+		        		String temp = json.getJSONObject("retData") .getString("temp");
+		        		String high_tmp = json.getJSONObject("retData") .getString("h_tmp");
+		        		String low_tmp = json.getJSONObject("retData") .getString("l_tmp");
+		        		String windDirection = json.getJSONObject("retData") .getString("WD");
+		            	String windSpeed = json.getJSONObject("retData") .getString("WS");
+		            	String sunRiseTime = json.getJSONObject("retData") .getString("sunrise");
+		            	String sunSetTime = json.getJSONObject("retData") .getString("sunset");
+		            	rs = rs + city + " " + weather + " " + temp + "℃"
+		            			+ "\n" + low_tmp + "℃~" + high_tmp + "℃" 
+		            			+ "\n" + windDirection + " " + windSpeed
+		            			+ "\n日出：" + sunRiseTime 
+		            			+ "\n日落：" + sunSetTime;
+		            	returnStr = getBackXMLTypeText(toName,fromName,rs);
+	            	} else {
+	            		returnStr = getBackXMLTypeText(toName,fromName,"输入的城市名称或格式有误。");;
+	            	} 
+	        	} else { // 此为 文本信息  
+		            returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
+		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
+		        }
+	        } 
 	          
 	        return returnStr;  
 	    }  

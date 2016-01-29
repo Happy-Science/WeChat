@@ -10,18 +10,34 @@ public class Weather_Run {
 	public static void main(String args[]){
 		NowWeather nw = new NowWeather();
 		JSONObject  json = new JSONObject();
-		String cityName = "昆明";
+		String cityName = "昆";
 		json = nw.getData(cityName);
 		
-		String city = json.getJSONObject("retData") .getString("city");
-		String weather = json.getJSONObject("retData") .getString("weather");
-		String temp = json.getJSONObject("retData") .getString("temp");
-		String high_tmp = json.getJSONObject("retData") .getString("h_tmp");
-		String low_tmp = json.getJSONObject("retData") .getString("l_tmp");
-		String windDirection = json.getJSONObject("retData") .getString("WD");
-    	String windSpeed = json.getJSONObject("retData") .getString("WS");
-    	String sunRiseTime = json.getJSONObject("retData") .getString("sunrise");
-    	String sunSetTime = json.getJSONObject("retData") .getString("sunset");
+		String errorNum = json.getString("errNum");
+		String errorMsg = json.getString("errMsg");
+		String city="";
+		String weather="";
+		String temp="";
+		String high_tmp="";
+		String low_tmp="";
+		String windDirection="";
+    	String windSpeed="";
+    	String sunRiseTime="";
+    	String sunSetTime="";
+    	
+    	if(errorNum.equals("0")){
+    		city = json.getJSONObject("retData") .getString("city");
+    		weather = json.getJSONObject("retData") .getString("weather");
+    		temp = json.getJSONObject("retData") .getString("temp");
+    		high_tmp = json.getJSONObject("retData") .getString("h_tmp");
+    		low_tmp = json.getJSONObject("retData") .getString("l_tmp");
+    		windDirection = json.getJSONObject("retData") .getString("WD");
+        	windSpeed = json.getJSONObject("retData") .getString("WS");
+        	sunRiseTime = json.getJSONObject("retData") .getString("sunrise");
+        	sunSetTime = json.getJSONObject("retData") .getString("sunset");
+    	} else {
+    		System.out.println("错误：" + errorMsg);
+    	} 
     	System.out.println("城市：" + city);
     	System.out.println("天气：" + weather);
     	System.out.println("当前温度：" + temp);

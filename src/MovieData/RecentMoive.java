@@ -36,7 +36,10 @@ public class RecentMoive {
 			movieList.add(1,movieDate);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			movieName[0] = "服务器异常！";
+			movieDate[0] = e.getMessage();
+			movieList.add(0,movieName);
+			movieList.add(1,movieDate);
 		} 
 		return movieList;
 	}

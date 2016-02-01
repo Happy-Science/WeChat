@@ -17,7 +17,8 @@ import MovieData.RecentMoive;
 import Weather.NowWeather;
 import net.sf.json.JSONObject;  
 	  
-	public class PushManage {  
+	public class PushManage { 
+		String inputString = "";
 	      
 	    public String PushManageXml(InputStream is) throws JDOMException {  
 	  
@@ -50,15 +51,14 @@ import net.sf.json.JSONObject;
 	                    type = first.getValue().trim();  
 	                } else if (first.getName().equals("Content")) {  
 	                    con = first.getValue().trim();  
+	                    inputString = con;
 	                } else if (first.getName().equals("Event")) {  
 	                    event = first.getValue().trim();  
 	                } else if (first.getName().equals("EventKey")) {  
 	                    eKey = first.getValue().trim();  
 	                }  
 	            }  
-	        } catch (IOException e) {  
-	            //异常  
-	        }  
+	           
 	          
 	        if (type.equals("event")) {     //此为事件  
 	            if (event.equals("subscribe")) {// 此为 关注事件  
@@ -76,7 +76,7 @@ import net.sf.json.JSONObject;
 	        				movieList = rm.getMovieData(movieNum);
 	        				String[] movieName = (String[])(movieList.get(0));
 	        				String[] movieScore = (String[])(movieList.get(1));
-	        				String re = null;
+	        				String re = "";
 	        				re = "———即将上映———";
 	        				for(int i=0; i<movieName.length; i++){
 	        					re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
@@ -87,7 +87,7 @@ import net.sf.json.JSONObject;
 	        				int movieNum = 8;
 	        				ArrayList<Object> movieList = new ArrayList<Object>();
 	        				NowMovie nm = new NowMovie();
-	        				String re = null;
+	        				String re = "";
 	        				movieList = nm.getMovieData(movieNum, "kunming");//昆明
 	        				String[] movieName = (String[])(movieList.get(0));
 	        				String[] movieScore = (String[])(movieList.get(1));
@@ -111,7 +111,7 @@ import net.sf.json.JSONObject;
 	        				movieList = rm.getMovieData(movieNum);
 	        				String[] movieName = (String[])(movieList.get(0));
 	        				String[] movieDate = (String[])(movieList.get(1));
-	        				String re = null;
+	        				String re = "";
 	        				re = "———即将上映———";
 	        				for(int i=0; i<movieName.length; i++){
 		        			re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
@@ -122,7 +122,7 @@ import net.sf.json.JSONObject;
 	        				int movieNum = Integer.parseInt(right);;
 	        				ArrayList<Object> movieList = new ArrayList<Object>();
 	        				NowMovie nm = new NowMovie();
-	        				String re = null;
+	        				String re = "";
 	        				movieList = nm.getMovieData(movieNum, "kunming");//昆明
 	        				String[] movieName = (String[])(movieList.get(0));
 	        				String[] movieScore = (String[])(movieList.get(1));
@@ -170,6 +170,11 @@ import net.sf.json.JSONObject;
 		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
 		        }
 	        } 
+	        }catch (IOException e) {  
+	            //异常  
+	        	returnStr = getBackXMLTypeText(toName,fromName,"异常！" + e.getMessage());
+	        }
+	        
 	          
 	        return returnStr;  
 	    }  
@@ -199,7 +204,7 @@ import net.sf.json.JSONObject;
 	        rootXML.addContent(new Element("FromUserName").setText(toName));  
 	        rootXML.addContent(new Element("CreateTime").setText(times));  
 	        rootXML.addContent(new Element("MsgType").setText("text"));  
-	        rootXML.addContent(new Element("Content").setText(content));  
+	        rootXML.addContent(new Element("Content").setText("你输入："+ inputString + ".\n" + content));  
 	  
 	        Document doc = new Document(rootXML);  
 	  

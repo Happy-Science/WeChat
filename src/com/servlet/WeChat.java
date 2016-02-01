@@ -61,9 +61,9 @@ public class WeChat extends HttpServlet {
 	        out.print(getXml);  
 	    } catch (JDOMException e) {  
 	        e.printStackTrace();  
-	        out.print("");  
+	        out.print(e.getMessage());  
 	    } catch (Exception e) {  
-	        out.print("");  
+	        out.print(e.getMessage());  
 	    } finally {   
 	        if(out!=null) {   
 	            out.flush();  

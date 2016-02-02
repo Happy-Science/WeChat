@@ -1,4 +1,4 @@
-package com.servlet;
+package wechat.controller.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jdom2.JDOMException;
-import AnalysisWechatData.PushManage;
+
 import Utils.SHA1;
+import wechat.controller.event.PushManage;
 
 public class WeChat extends HttpServlet {
 	/**

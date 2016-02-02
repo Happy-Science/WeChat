@@ -1,4 +1,4 @@
-package Weather;
+package wechat.function.weather;
 
 import net.sf.json.JSONObject;
 

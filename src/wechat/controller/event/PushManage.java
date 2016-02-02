@@ -1,4 +1,4 @@
-package AnalysisWechatData;
+package wechat.controller.event;
 
 	import java.io.IOException;  
 	import java.io.InputStream;  
@@ -12,10 +12,10 @@ import java.util.Date;
 	import org.jdom2.input.SAXBuilder;  
 	import org.jdom2.output.XMLOutputter;
 
-import MovieData.NowMovie;
-import MovieData.RecentMoive;
-import Weather.NowWeather;
-import net.sf.json.JSONObject;  
+import net.sf.json.JSONObject;
+import wechat.function.movie.NowMovie;
+import wechat.function.movie.RecentMoive;
+import wechat.function.weather.NowWeather;  
 	  
 	public class PushManage { 
 		String inputString = "";

@@ -1,4 +1,4 @@
-package MovieData;
+package wechat.function.movie;
 
 import java.util.ArrayList;
 

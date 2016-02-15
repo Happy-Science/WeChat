@@ -18,7 +18,7 @@ public class NowMovie {
 		String url = "http://movie.douban.com/nowplaying/kunming/";
 		try {
 			try{
-			Connection con = Jsoup.connect(url).timeout(5000);	  
+			Connection con = Jsoup.connect(url).timeout(30000);	  
 			con.header("Accept-Encoding", "gzip, deflate");   
 			con.header("Connection", "keep-alive");   
 			con.header("Host", url);   

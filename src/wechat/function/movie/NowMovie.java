@@ -1,14 +1,14 @@
 package wechat.function.movie;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.jsoup.Connection;
-import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+//import org.jsoup.Connection;
+//import org.jsoup.HttpStatusException;
+//import org.jsoup.Jsoup;
+//import org.jsoup.nodes.Document;
 
 import wechat.db.DBConnector;
 

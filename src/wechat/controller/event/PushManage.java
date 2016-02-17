@@ -28,8 +28,6 @@ import wechat.function.weather.NowWeather;
 	        String type = ""; // 请求类型  
 	        String con = ""; // 消息内容(接收)  
 	        String event = ""; // 自定义按钮事件请求  
-	        String eKey = ""; // 事件请求key值  
-	          
 	        try {  
 	  
 	            SAXBuilder sax = new SAXBuilder();  
@@ -38,7 +36,7 @@ import wechat.function.weather.NowWeather;
 	            Element root = doc.getRootElement();  
 	  
 	            // 获得根元素的第一级子节点  
-	            List list = root.getChildren();  
+	            List<?> list = root.getChildren();  
 	            for (int j = 0; j < list.size(); j++) {  
 	                // 获得结点  
 	                Element first = (Element) list.get(j);  
@@ -55,7 +53,6 @@ import wechat.function.weather.NowWeather;
 	                } else if (first.getName().equals("Event")) {  
 	                    event = first.getValue().trim();  
 	                } else if (first.getName().equals("EventKey")) {  
-	                    eKey = first.getValue().trim();  
 	                }  
 	            }  
 	           
@@ -228,7 +225,8 @@ import wechat.function.weather.NowWeather;
 	     * @param content 
 	     * @return 
 	     */  
-	    private String getBackXMLTypeImg(String toName, String fromName,  
+	    @SuppressWarnings("unused")
+		private String getBackXMLTypeImg(String toName, String fromName,  
 	            String title, String content, String url, String pUrl) {  
 	  
 	        String returnStr = "";  
@@ -272,7 +270,8 @@ import wechat.function.weather.NowWeather;
 	     * @param content 
 	     * @return 
 	     */  
-	    private String getBackXMLTypeImg(String toName, String fromName,  
+	    @SuppressWarnings("unused")
+		private String getBackXMLTypeImg(String toName, String fromName,  
 	            String title, String content, String url) {  
 	  
 	        String returnStr = "";  

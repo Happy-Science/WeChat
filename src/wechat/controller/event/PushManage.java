@@ -123,15 +123,19 @@ import wechat.function.weather.NowWeather;
 	        				ArrayList<Object> movieList = new ArrayList<Object>();
 	        				NowMovie nm = new NowMovie();
 	        				String re = "";
-	        				movieList = nm.getMovieData(movieNum, "kunming");//昆明
-	        				String[] movieName = (String[])(movieList.get(0));
-	        				String[] movieScore = (String[])(movieList.get(1));
-	        				re = "———正在热映———";
-	        				for(int i=0; i<movieName.length; i++){
-	        					re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
-			        					"\n豆瓣评分：" + movieScore[i];
+	        				if(movieNum<16){
+	        					movieList = nm.getMovieData(movieNum, "kunming");//昆明
+	        					String[] movieName = (String[])(movieList.get(0));
+	        					String[] movieScore = (String[])(movieList.get(1));
+	        					re = "———正在热映———";
+	        					for(int i=0; i<movieName.length; i++){
+	        						re = re + "\n(" + (i+1) + ").电影名称：" + movieName[i] +
+	        								"\n豆瓣评分：" + movieScore[i];
+	        					}
+	        					returnStr = getBackXMLTypeText(toName,fromName, re + "\n（数据来自云服务器）");  
+	        				}else {
+	        					returnStr = getBackXMLTypeText(toName,fromName, "查询数目不可大于15");
 	        				}
-	        				returnStr = getBackXMLTypeText(toName,fromName, re);  
 	        			} else {
 	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
 	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");

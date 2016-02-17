@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DBConnector {
-	public static final String url = "jdbc:mysql://114.215.81.129/WeChat";  
+	public static final String url = "jdbc:mysql://114.215.81.129/WeChat?useUnicode=true&characterEncoding=utf8"; 
     public static final String name = "com.mysql.jdbc.Driver";  
     public static final String user = "root";  
     public static final String password = "Bruceisljy007";  

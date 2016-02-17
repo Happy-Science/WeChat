@@ -59,9 +59,9 @@ import wechat.function.weather.NowWeather;
 	          
 	        if (type.equals("event")) {     //此为事件  
 	            if (event.equals("subscribe")) {// 此为 关注事件  
-	                  
+	            	returnStr = getBackXMLTypeText(toName,fromName, "感谢您关注【平静的海】.\n微信号：jamuklee");
 	            } else if (event.equals("unsubscribe")) { //此为取消关注事件   
-	                  
+	            	
 	            }   
 	        } else if (type.equals("text")) { // 此为 文本信息  
 	        	if(con.length()<=6 && con.length()>=4 && con.contains("映")){
@@ -166,7 +166,9 @@ import wechat.function.weather.NowWeather;
 	            	} else {
 	            		returnStr = getBackXMLTypeText(toName,fromName,"输入的城市名称或格式有误。");;
 	            	} 
-	        	} else { // 此为 文本信息  
+	        	} else if(con.contains("图片")){
+	        		returnStr = getBackXMLTypeImg(toName, fromName, "美食杰", "来自互联网【美食杰】，拥有众多食谱。（此为测试）", "http://i.meishi.cc/discussion/", "http://site.meishij.net/p2/20160204/20160204112650_496.png");
+	        	} else {// 此为 文本信息  
 		            returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
 		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
 		        }
@@ -225,7 +227,6 @@ import wechat.function.weather.NowWeather;
 	     * @param content 
 	     * @return 
 	     */  
-	    @SuppressWarnings("unused")
 		private String getBackXMLTypeImg(String toName, String fromName,  
 	            String title, String content, String url, String pUrl) {  
 	  

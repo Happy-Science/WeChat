@@ -62,7 +62,7 @@ public class NowMovie {
     		int num = 14;
          	while (ret.next()) {
          		movieName[num] = ret.getString(2);
-     			movieScore[num] = ret.getFloat(3) + "";
+     			movieScore[num] = ret.getString(3);
      			num--;
          	}//显示数据 
          	for(int i=0; i<movieNum; i++){

@@ -13,6 +13,7 @@ import java.util.Date;
 	import org.jdom2.output.XMLOutputter;
 
 import net.sf.json.JSONObject;
+import wechat.function.food.FoodList;
 import wechat.function.movie.NowMovie;
 import wechat.function.movie.RecentMoive;
 import wechat.function.weather.NowWeather;  
@@ -96,7 +97,8 @@ import wechat.function.weather.NowWeather;
 	        				returnStr = getBackXMLTypeText(toName,fromName, re);   
 	        			} else {
 	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
-	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
+	    		            		+ "\n*查询天气请输入：地名+'天气'【例如：北京天气】"
+	        						+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】");
 	        			}
 	        		}else{
 	        			String left = con.substring(0, 4);
@@ -135,7 +137,8 @@ import wechat.function.weather.NowWeather;
 	        				}
 	        			} else {
 	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
-	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
+	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】"
+	    		            		+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】");
 	        			}
 	        		}
 	        	} else if(con.contains("天气")){
@@ -166,11 +169,16 @@ import wechat.function.weather.NowWeather;
 	            	} else {
 	            		returnStr = getBackXMLTypeText(toName,fromName,"输入的城市名称或格式有误。");;
 	            	} 
-	        	} else if(con.contains("图片")){
-	        		returnStr = getBackXMLTypeImg(toName, fromName, "美食杰", "来自互联网【美食杰】，拥有众多食谱。（此为测试）", "http://i.meishi.cc/discussion/", "http://site.meishij.net/p2/20160204/20160204112650_496.png");
+	        	} else if(con.length()>2 && con.substring(0,2).equals("菜谱")){
+	        		FoodList fl = new FoodList();
+	        		ArrayList<Object> foodList = new ArrayList<Object>();
+	        		String foodName = con.substring(2,con.length());
+	        		foodList = fl.getFoodList(foodName);
+	        		returnStr = getBackXMLTypeImg(toName, fromName, foodName,(String [])foodList.get(0), (String [])foodList.get(1), (String [])foodList.get(2), (String [])foodList.get(3));
 	        	} else {// 此为 文本信息  
 		            returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
-		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】");
+		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】"
+		            		+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】");
 		        }
 	        } 
 	        }catch (IOException e) {  
@@ -207,7 +215,7 @@ import wechat.function.weather.NowWeather;
 	        rootXML.addContent(new Element("FromUserName").setText(toName));  
 	        rootXML.addContent(new Element("CreateTime").setText(times));  
 	        rootXML.addContent(new Element("MsgType").setText("text"));  
-	        rootXML.addContent(new Element("Content").setText("你输入："+ inputString + ".\n" + content));  
+	        rootXML.addContent(new Element("Content").setText(content));  
 	  
 	        Document doc = new Document(rootXML);  
 	  
@@ -227,6 +235,7 @@ import wechat.function.weather.NowWeather;
 	     * @param content 
 	     * @return 
 	     */  
+		@SuppressWarnings("unused")
 		private String getBackXMLTypeImg(String toName, String fromName,  
 	            String title, String content, String url, String pUrl) {  
 	  
@@ -308,6 +317,50 @@ import wechat.function.weather.NowWeather;
 	  
 	        return returnStr;  
 	    }  
+	    //多图模式
+	    private String getBackXMLTypeImg(String toName, String fromName, String foodName,  
+	            String[] title, String[] content, String[] pUrl, String[] url) {  
+	  
+	        String returnStr = "";  
+	  
+	        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");  
+	        String times = format.format(new Date());  
+	  
+	        Element rootXML = new Element("xml");  
+	  
+	        rootXML.addContent(new Element("ToUserName").setText(fromName));  
+	        rootXML.addContent(new Element("FromUserName").setText(toName));  
+	        rootXML.addContent(new Element("CreateTime").setText(times));  
+	        rootXML.addContent(new Element("MsgType").setText("news"));  
+	        rootXML.addContent(new Element("ArticleCount").setText("6"));  
+	  
+	        Element fXML = new Element("Articles");  
+	        Element mXML = null;  
+	  
+	        for(int i=0; i<title.length; i++){
+	        	mXML = new Element("item");  
+	        	mXML.addContent(new Element("Title").setText(title[i]));  
+	        	mXML.addContent(new Element("Description").setText(content[i]));  
+	        	mXML.addContent(new Element("PicUrl").setText(pUrl[i]));  
+	        	mXML.addContent(new Element("Url").setText(url[i]));  
+	        	fXML.addContent(mXML);
+	        }
+	        //其他
+	        mXML = new Element("item");  
+        	mXML.addContent(new Element("Title").setText("查看更多"));  
+        	mXML.addContent(new Element("Description").setText("点击查看更多菜谱"));  
+        	mXML.addContent(new Element("PicUrl").setText(""));  
+        	mXML.addContent(new Element("Url").setText("http://so.meishi.cc/index.php?q=" + foodName));  
+        	fXML.addContent(mXML);
+	        rootXML.addContent(fXML);  
+	  
+	        Document doc = new Document(rootXML);  
+	  
+	        XMLOutputter XMLOut = new XMLOutputter();  
+	        returnStr = XMLOut.outputString(doc);  
+	  
+	        return returnStr;  
+	    }
 	  
 	    /** 
 	     * 编译音乐信息 

@@ -13,6 +13,7 @@ import java.util.Date;
 	import org.jdom2.output.XMLOutputter;
 
 import net.sf.json.JSONObject;
+import wechat.function.LOL.PlayerInfo;
 import wechat.function.food.FoodList;
 import wechat.function.movie.NowMovie;
 import wechat.function.movie.RecentMoive;
@@ -21,7 +22,8 @@ import wechat.function.weather.NowWeather;
 	public class PushManage { 
 		String inputString = "";
 	      
-	    public String PushManageXml(InputStream is) throws JDOMException {  
+	    @SuppressWarnings("unchecked")
+		public String PushManageXml(InputStream is) throws JDOMException {  
 	  
 	        String returnStr = ""; // 反回Servlet字符串  
 	        String toName = ""; // 开发者微信号  
@@ -98,7 +100,8 @@ import wechat.function.weather.NowWeather;
 	        			} else {
 	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
 	    		            		+ "\n*查询天气请输入：地名+'天气'【例如：北京天气】"
-	        						+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】");
+	        						+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】"
+	        						+ "\n4.查询LOL输入：'lol'+服务器名+'&'+游戏ID【例如：lol艾欧尼亚&玩家名】");
 	        			}
 	        		}else{
 	        			String left = con.substring(0, 4);
@@ -138,7 +141,8 @@ import wechat.function.weather.NowWeather;
 	        			} else {
 	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
 	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】"
-	    		            		+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】");
+	    		            		+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】"
+	    		            		+ "\n4.查询LOL输入：'lol'+服务器名+'&'+游戏ID【例如：lol艾欧尼亚&玩家名】");
 	        			}
 	        		}
 	        	} else if(con.contains("天气")){
@@ -167,7 +171,7 @@ import wechat.function.weather.NowWeather;
 		            			+ "\n日落：" + sunSetTime;
 		            	returnStr = getBackXMLTypeText(toName,fromName,rs);
 	            	} else {
-	            		returnStr = getBackXMLTypeText(toName,fromName,"输入的城市名称或格式有误。");;
+	            		returnStr = getBackXMLTypeText(toName,fromName,"输入的城市名称或格式有误。");
 	            	} 
 	        	} else if(con.length()>2 && con.substring(0,2).equals("菜谱")){
 	        		FoodList fl = new FoodList();
@@ -175,10 +179,41 @@ import wechat.function.weather.NowWeather;
 	        		String foodName = con.substring(2,con.length());
 	        		foodList = fl.getFoodList(foodName);
 	        		returnStr = getBackXMLTypeImg(toName, fromName, foodName,(String [])foodList.get(0), (String [])foodList.get(1), (String [])foodList.get(2), (String [])foodList.get(3));
-	        	} else {// 此为 文本信息  
-		            returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
-		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】"
-		            		+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】");
+	        	} else if(con.length()>3 && con.substring(0,3).equals("lol")){
+	        		PlayerInfo pi = new PlayerInfo();
+	        		ArrayList<Object> infoList = new ArrayList<Object>();
+	        		String serverName = con.substring(3,con.indexOf("&"));
+	        		String playerName = con.substring(con.indexOf("&")+1,con.length());
+	        		infoList = pi.getPlayerInfo(serverName, playerName);
+	        		String str = "===基本信息===";
+	        		str = str + "\n服务器：" + serverName + "\n玩家ID：" + playerName + "\n战斗力：" + infoList.get(0);
+	        		str = str + "\n===匹配模式===";
+	        		for(int i=1; i<((ArrayList<Object>)infoList.get(1)).size(); i++){
+	        			String [] title = (String[])((ArrayList<Object>)infoList.get(1)).get(0);
+	        			String [] moshi = (String[])((ArrayList<Object>)infoList.get(1)).get(i);
+	        			for(int j=0; j<title.length; j++){
+	        				str = str + "\n" + title[j] + "：" + moshi[j];
+	        			}
+	        		}
+	        		str = str + "\n===排位模式===";
+	        		for(int i=1; i<((ArrayList<Object>)infoList.get(2)).size(); i++){
+	        			String [] title = (String[])((ArrayList<Object>)infoList.get(2)).get(0);
+	        			String [] moshi = (String[])((ArrayList<Object>)infoList.get(2)).get(i);
+	        			for(int j=0; j<title.length; j++){
+	        				str = str + "\n" + title[j] + "：" + moshi[j];
+	        			}
+	        		}
+	        		str = str + "\n===最近比赛===";
+	        		String[] recent = (String[])infoList.get(3);
+	        		for(int i=1; i<recent.length; i++){
+	        				str = str + "\n" + recent[i];
+	        		}
+	        		returnStr = getBackXMLTypeText(toName,fromName,str);
+	        	}else {// 此为 文本信息  
+		            returnStr = getBackXMLTypeText(toName,fromName,"1.查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
+		            		+ "\n2.查询天气请输入：地名+天气【例如：北京天气】"
+		            		+ "\n3.查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】"
+		            		+ "\n4.查询LOL输入：'lol'+服务器名+'&'+游戏ID【例如：lol艾欧尼亚&玩家名】");
 		        }
 	        } 
 	        }catch (IOException e) {  

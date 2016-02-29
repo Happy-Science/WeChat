@@ -17,6 +17,8 @@ import wechat.function.LOL.PlayerInfo;
 import wechat.function.food.FoodList;
 import wechat.function.movie.NowMovie;
 import wechat.function.movie.RecentMoive;
+import wechat.function.stock.StockImg;
+import wechat.function.stock.StockMsg;
 import wechat.function.weather.NowWeather;  
 	  
 	public class PushManage { 
@@ -31,6 +33,14 @@ import wechat.function.weather.NowWeather;
 	        String type = ""; // 请求类型  
 	        String con = ""; // 消息内容(接收)  
 	        String event = ""; // 自定义按钮事件请求  
+	        String location_X = ""; // 自定义按钮事件请求 
+	        String location_Y = ""; // 自定义按钮事件请求 
+	        String defaultStr = "1.查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
+            		+ "\n2.查询天气请输入：地名+'天气'【例如：北京天气】"
+					+ "\n2.查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】"
+					+ "\n4.查询LOL输入：'lol'+服务器名+'&'+游戏ID【例如：lol艾欧尼亚&玩家名】"
+					+ "\n5.查询股票信息 输入：'股票'+股票代码【例如：sh123456】(查询大盘指数需在股票代码前加上's_')"
+					+ "\n6.查询股票K线图 输入：'分时线（日K线、周K线、月K线）'+股票代码【例如：日K线sh123456】";
 	        try {  
 	  
 	            SAXBuilder sax = new SAXBuilder();  
@@ -57,6 +67,12 @@ import wechat.function.weather.NowWeather;
 	                    event = first.getValue().trim();  
 	                } else if (first.getName().equals("EventKey")) {  
 	                }  
+	                else if (first.getName().equals("Location_X")) {  
+	                	location_X = first.getValue().trim();
+	                }
+	                else if (first.getName().equals("Location_Y")) {  
+	                	location_Y = first.getValue().trim();
+	                }
 	            }  
 	           
 	          
@@ -98,10 +114,7 @@ import wechat.function.weather.NowWeather;
 	        				}
 	        				returnStr = getBackXMLTypeText(toName,fromName, re);   
 	        			} else {
-	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
-	    		            		+ "\n*查询天气请输入：地名+'天气'【例如：北京天气】"
-	        						+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】"
-	        						+ "\n4.查询LOL输入：'lol'+服务器名+'&'+游戏ID【例如：lol艾欧尼亚&玩家名】");
+	        				returnStr = getBackXMLTypeText(toName,fromName,defaultStr);
 	        			}
 	        		}else{
 	        			String left = con.substring(0, 4);
@@ -139,10 +152,7 @@ import wechat.function.weather.NowWeather;
 	        					returnStr = getBackXMLTypeText(toName,fromName, "查询数目不可大于15");
 	        				}
 	        			} else {
-	        				returnStr = getBackXMLTypeText(toName,fromName,"*查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
-	    		            		+ "\n*查询天气请输入：地名+天气【例如：北京天气】"
-	    		            		+ "\n*查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】"
-	    		            		+ "\n4.查询LOL输入：'lol'+服务器名+'&'+游戏ID【例如：lol艾欧尼亚&玩家名】");
+	        				returnStr = getBackXMLTypeText(toName,fromName,defaultStr);
 	        			}
 	        		}
 	        	} else if(con.contains("天气")){
@@ -209,13 +219,20 @@ import wechat.function.weather.NowWeather;
 	        				str = str + "\n" + recent[i];
 	        		}
 	        		returnStr = getBackXMLTypeText(toName,fromName,str);
+	        	}else if(con.contains("股票")){
+	        		StockMsg smsg = new StockMsg();
+	        		String str = smsg.getData(con.substring(2,con.length()));
+	        		returnStr = getBackXMLTypeText(toName,fromName,str);
+	        	}else if(con.contains("线s")){
+	        		StockImg sisg = new StockImg();
+	        		String str [] = sisg.getData(con.substring(0,1),con.substring(3,con.length())).split(",");
+	        		returnStr = getBackXMLTypeImg(toName,fromName,str[0],"",str[2],str[2]);
 	        	}else {// 此为 文本信息  
-		            returnStr = getBackXMLTypeText(toName,fromName,"1.查询正在热映（即将上映）的电影请输入：正在热映（即将上映）+查询数量 【例如：正在热映10】"
-		            		+ "\n2.查询天气请输入：地名+天气【例如：北京天气】"
-		            		+ "\n3.查询菜谱请输入：'菜谱'+菜名【例如：菜谱红烧牛肉】"
-		            		+ "\n4.查询LOL输入：'lol'+服务器名+'&'+游戏ID【例如：lol艾欧尼亚&玩家名】");
+		            returnStr = getBackXMLTypeText(toName,fromName,defaultStr);
 		        }
-	        } 
+	        } else if(type.equals("location")){
+	        	returnStr = getBackXMLTypeText(toName,fromName,"你发送的是位置信息,经度:"+location_Y+",纬度:"+location_X);
+	        }
 	        }catch (IOException e) {  
 	            //异常  
 	        	returnStr = getBackXMLTypeText(toName,fromName,"异常！" + e.getMessage());
@@ -270,7 +287,6 @@ import wechat.function.weather.NowWeather;
 	     * @param content 
 	     * @return 
 	     */  
-		@SuppressWarnings("unused")
 		private String getBackXMLTypeImg(String toName, String fromName,  
 	            String title, String content, String url, String pUrl) {  
 	  
@@ -292,9 +308,9 @@ import wechat.function.weather.NowWeather;
 	  
 	        mXML = new Element("item");  
 	        mXML.addContent(new Element("Title").setText(title));  
-	        mXML.addContent(new Element("Description").setText(content));  
+	        //mXML.addContent(new Element("Description").setText(content));  
 	        mXML.addContent(new Element("PicUrl").setText(pUrl));  
-	        mXML.addContent(new Element("Url").setText(url));  
+	        mXML.addContent(new Element("Url").setText(url));
 	        fXML.addContent(mXML);  
 	        rootXML.addContent(fXML);  
 	  
